@@ -12,10 +12,12 @@ fi
 ghidra_home="${1}"
 ghidra_headless="${ghidra_home}/support/analyzeHeadless"
 ghidra_scripts="${ghidra_home}/Ghidra/Features/FunctionID/ghidra_scripts"
-libs_dir="${2:-libs}"
-projects_dir="${3:-projects}"
-logs_dir="${4:-logs}"
-output_dir="${5:-fid_files}"
+processor="${2}"
+libs_dir="${3:-libs}"
+projects_dir="${4:-projects}"
+logs_dir="${5:-logs}"
+output_dir="${6:-fid_files}"
+
 
 if [[ ! -d "${ghidra_home}" ]]; then
 	exit_with_message "Ghidra home directory \"${ghidra_home}\" doesn't exist"
@@ -45,6 +47,7 @@ while IFS="" read -r lib_variant || [[ -n "${lib_variant}" ]]; do
 	printf "\tImporting and analyzing files\n"
 	"${ghidra_headless}" "${project_dir}" "${project}" \
 		-import "${libs_dir}/${project}" \
+		-processor "${processor}" \
 		-recursive \
 		-scriptPath "$ghidra_scripts" \
 		-preScript FunctionIDHeadlessPrescript.java \
